@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C Programming Roadmap — From Python to Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #111620;
+    --border: #1e2a3a;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #7fff6b;
+    --text: #cdd6f4;
+    --muted: #6c7a8e;
+    --week-colors: #00d4ff, #7fff6b, #ff6b35, #c77dff, #ffd166, #ef476f, #06d6a0, #118ab2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .everything { position: relative; z-index: 1; }
+
+  /* HERO */
+  header {
+    padding: 80px 40px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  h1 span.hl { color: var(--accent); }
+  h1 span.hl2 { color: var(--accent2); }
+
+  .subtitle {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  /* STATS BAR */
+  .stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto 0;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN CONTENT */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* WEEK CARDS */
+  .weeks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .week-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .week-card:hover { border-color: var(--accent); }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .week-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    width: 70px;
+    flex-shrink: 0;
+  }
+
+  .week-title-block { flex: 1; }
+
+  .week-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .week-subtitle {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .week-toggle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    color: var(--muted);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .week-card.open .week-toggle { transform: rotate(45deg); }
+
+  .week-body {
+    display: none;
+    padding: 0 28px 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .week-card.open .week-body { display: block; }
+
+  /* CONCEPT SECTIONS INSIDE WEEKS */
+  .concept-block {
+    margin-top: 24px;
+  }
+
+  .concept-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .concept-block h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .concept-block p, .concept-block li {
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  .concept-block ul, .concept-block ol {
+    padding-left: 20px;
+  }
+
+  .concept-block li { margin-bottom: 6px; }
+
+  /* CODE BLOCK */
+  pre {
+    background: #070b10;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 14px 0;
+    color: #e0e8f0;
+  }
+
+  .kw { color: #c77dff; }
+  .fn { color: var(--accent); }
+  .str { color: var(--accent3); }
+  .cm { color: var(--muted); font-style: italic; }
+  .num { color: var(--accent2); }
+  .type { color: #ffd166; }
+
+  /* PYTHON COMPARE */
+  .compare-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .compare-box > div {
+    background: #070b10;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .compare-box .lang-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    background: var(--border);
+    color: var(--muted);
+  }
+
+  .compare-box .lang-label.py { color: #ffd166; }
+  .compare-box .lang-label.c { color: var(--accent); }
+
+  .compare-box pre {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    border-left: none;
+  }
+
+  /* PILL TAGS */
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .pill-blue { color: var(--accent); border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.05); }
+  .pill-green { color: var(--accent3); border-color: rgba(127,255,107,0.3); background: rgba(127,255,107,0.05); }
+  .pill-orange { color: var(--accent2); border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.05); }
+  .pill-purple { color: #c77dff; border-color: rgba(199,125,255,0.3); background: rgba(199,125,255,0.05); }
+
+  /* WARNING BOX */
+  .warn-box {
+    background: rgba(255,107,53,0.07);
+    border: 1px solid rgba(255,107,53,0.3);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 14px 0;
+  }
+
+  .warn-box .warn-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+
+  .tip-box {
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 14px 0;
+  }
+
+  .tip-box .tip-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  /* RESOURCES PANEL */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .res-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+
+  .res-card:hover { border-color: var(--accent); }
+
+  .res-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .res-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .res-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .res-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0,212,255,0.3);
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .res-link:hover { border-color: var(--accent); }
+
+  /* TOOLS PANEL */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .tool-card h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .tool-card p {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .tool-icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  /* MISTAKES PANEL */
+  .mistakes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mistake-card {
+    background: var(--surface);
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 8px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mistake-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent2);
+  }
+
+  .mistake-card h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+
+  .mistake-card p {
+    font-size: 0.86rem;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    margin-bottom: 28px;
+  }
+
+  .section-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .section-header p {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  /* PROGRESS TRACKER */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 2px;
+    height: 3px;
+    flex: 1;
+    max-width: 200px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 50px 20px 40px; }
+    .main { padding: 28px 20px; }
+    .nav-tabs { padding: 0 20px; }
+    .compare-box { grid-template-columns: 1fr; }
+    h1 { letter-spacing: -1px; }
+  }
+</style>
+</head>
+<body>
+<div class="everything">
+
+<header>
+  <div class="tag">// Learning Roadmap</div>
+  <h1>Master <span class="hl">C</span> Programming<br>from <span class="hl2">Python</span> to Systems</h1>
+  <p class="subtitle">A structured 10-week curriculum for practical C mastery — covering robotics, embedded systems, and low-level programming. Built for Python developers who want real power.</p>
+  <div class="stats">
+    <div class="stat"><span class="stat-num">10</span><span class="stat-label">Weeks</span></div>
+    <div class="stat"><span class="stat-num">40+</span><span class="stat-label">Exercises</span></div>
+    <div class="stat"><span class="stat-num">8</span><span class="stat-label">Projects</span></div>
+    <div class="stat"><span class="stat-num">20+</span><span class="stat-label">Resources</span></div>
+  </div>
+</header>
+
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('roadmap', this)">📅 Weekly Roadmap</button>
+  <button class="tab-btn" onclick="showTab('resources', this)">📚 Books & Courses</button>
+  <button class="tab-btn" onclick="showTab('tools', this)">🛠 Tools & IDEs</button>
+  <button class="tab-btn" onclick="showTab('mistakes', this)">⚠️ Common Mistakes</button>
+  <button class="tab-btn" onclick="showTab('debug', this)">🔍 Debug Tips</button>
+</nav>
+
+<main class="main">
+
+<!-- ===================== ROADMAP TAB ===================== -->
+<div id="tab-roadmap" class="tab-panel active">
+<div class="section-header">
+  <h2>Week-by-Week Learning Path</h2>
+  <p>Click each week to expand. Each week includes concepts, Python comparisons, code examples, exercises, and a mini-project.</p>
+</div>
+
+<div class="weeks-grid">
+
+  <!-- WEEK 1 -->
+  <div class="week-card" id="wk1">
+    <div class="week-header" onclick="toggleWeek('wk1')">
+      <span class="week-num" style="color:#00d4ff">Week 01</span>
+      <div class="week-title-block">
+        <div class="week-title">C Foundations — Hello, Low Level</div>
+        <div class="week-subtitle">Compilation, types, variables, I/O, operators</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+
+      <div class="concept-block">
+        <div class="concept-label">🐍 Coming from Python</div>
+        <p>Python runs scripts interpreted. C is <strong>compiled</strong> — you run <code>gcc</code> to turn source code into a binary. There's no REPL; every program needs a <code>main()</code> function.</p>
+        <div class="compare-box">
+          <div><div class="lang-label py">Python</div><pre>name = "Alice"
+age = 30
+print(f"Hello, {name}!")</pre></div>
+          <div><div class="lang-label c">C</div><pre><span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="type">char</span> name[] = <span class="str">"Alice"</span>;
+    <span class="type">int</span> age = <span class="num">30</span>;
+    <span class="fn">printf</span>(<span class="str">"Hello, %s!\n"</span>, name);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Core Concepts</div>
+        <ul>
+          <li><strong>Data types:</strong> <code>int</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>long</code>, <code>unsigned int</code> — sizes are fixed and matter</li>
+          <li><strong>Compilation pipeline:</strong> Source → Preprocessor → Compiler → Assembler → Linker → Binary</li>
+          <li><strong>printf / scanf:</strong> Formatted I/O with format specifiers (<code>%d</code>, <code>%f</code>, <code>%s</code>, <code>%c</code>)</li>
+          <li><strong>Operators:</strong> Arithmetic, relational, logical, bitwise (<code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code>)</li>
+          <li><strong>Type casting:</strong> Explicit vs implicit conversion</li>
+        </ul>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">⚙️ Compile & Run</div>
+        <pre><span class="cm"># Install GCC (Linux/Mac)</span>
+sudo apt install gcc   <span class="cm"># Ubuntu</span>
+brew install gcc       <span class="cm"># Mac</span>
+
+<span class="cm"># Compile and run</span>
+gcc -Wall -o hello hello.c
+./hello
+
+<span class="cm"># -Wall turns on all warnings — always use this!</span></pre>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🏋️ Exercises</div>
+        <ol>
+          <li>Write a program that reads your name and age and prints a greeting</li>
+          <li>Compute and print the size of each data type using <code>sizeof()</code></li>
+          <li>Build a temperature converter: Celsius ↔ Fahrenheit</li>
+          <li>Use bitwise operators to toggle, set, and clear individual bits of an integer</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">📦 Mini Project — Week 1</div>
+        <p><strong>Simple Calculator:</strong> Read two numbers and an operator (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) from stdin, compute and print the result. Handle division by zero.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week-card" id="wk2">
+    <div class="week-header" onclick="toggleWeek('wk2')">
+      <span class="week-num" style="color:#7fff6b">Week 02</span>
+      <div class="week-title-block">
+        <div class="week-title">Control Flow & Functions</div>
+        <div class="week-subtitle">if/else, loops, switch, functions, scope, recursion</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+
+      <div class="concept-block">
+        <div class="concept-label">🐍 Coming from Python</div>
+        <p>Python uses indentation for blocks; C uses <code>{ }</code>. C's <code>for</code> loop is much more flexible — the loop variable can be mutated inside. There's no Python-style <code>for x in list</code> — you iterate with indices.</p>
+        <div class="compare-box">
+          <div><div class="lang-label py">Python</div><pre>for i in range(10):
+    if i % 2 == 0:
+        print(i)</pre></div>
+          <div><div class="lang-label c">C</div><pre><span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="kw">if</span> (i % <span class="num">2</span> == <span class="num">0</span>) {
+        <span class="fn">printf</span>(<span class="str">"%d\n"</span>, i);
+    }
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Core Concepts</div>
+        <ul>
+          <li><strong>if / else if / else</strong> — same logic as Python, different syntax</li>
+          <li><strong>switch / case</strong> — efficient multi-branch for integers/chars; don't forget <code>break</code>!</li>
+          <li><strong>while / do-while / for</strong> — C's three loop types</li>
+          <li><strong>Functions:</strong> Return type, parameters — everything must be typed. Declare before use (or use a prototype)</li>
+          <li><strong>Scope:</strong> Variables live in their block <code>{ }</code>. No closures, no global-by-default</li>
+          <li><strong>Recursion:</strong> C supports recursion but has a finite stack — deep recursion causes stack overflow</li>
+        </ul>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">💡 Function Example</div>
+        <pre><span class="cm">// Function prototype (declaration)</span>
+<span class="type">int</span> <span class="fn">factorial</span>(<span class="type">int</span> n);
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="fn">factorial</span>(<span class="num">5</span>)); <span class="cm">// 120</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="cm">// Function definition</span>
+<span class="type">int</span> <span class="fn">factorial</span>(<span class="type">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>;
+    <span class="kw">return</span> n * <span class="fn">factorial</span>(n - <span class="num">1</span>);
+}</pre>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🏋️ Exercises</div>
+        <ol>
+          <li>FizzBuzz in C (classic, but notice the type discipline)</li>
+          <li>Write <code>isPrime(int n)</code> — returns 1 if prime, 0 otherwise</li>
+          <li>Fibonacci sequence iteratively and recursively — compare performance</li>
+          <li>Write a menu-driven program using <code>switch</code> for a unit converter</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">📦 Mini Project — Week 2</div>
+        <p><strong>Number Guessing Game:</strong> Computer picks a random number (use <code>rand()</code> from <code>stdlib.h</code>). Player guesses with hints "higher/lower". Count and display attempts. Replay option using a loop.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week-card" id="wk3">
+    <div class="week-header" onclick="toggleWeek('wk3')">
+      <span class="week-num" style="color:#ff6b35">Week 03</span>
+      <div class="week-title-block">
+        <div class="week-title">Arrays & Strings</div>
+        <div class="week-subtitle">Fixed arrays, C-strings, string.h, multi-dimensional arrays</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+
+      <div class="concept-block">
+        <div class="concept-label">🐍 Coming from Python</div>
+        <p>Python lists resize dynamically and hold mixed types. C arrays are <strong>fixed-size</strong> and typed, stored in contiguous memory. Strings in C are arrays of <code>char</code> ending with a null terminator <code>'\0'</code> — there's no built-in string type!</p>
+        <div class="compare-box">
+          <div><div class="lang-label py">Python</div><pre>nums = [1, 2, 3, 4, 5]
+msg = "Hello"
+print(len(msg))  # 5</pre></div>
+          <div><div class="lang-label c">C</div><pre><span class="type">int</span> nums[<span class="num">5</span>] = {<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>};
+<span class="type">char</span> msg[] = <span class="str">"Hello"</span>; <span class="cm">// 6 bytes incl \0</span>
+<span class="fn">printf</span>(<span class="str">"%zu\n"</span>, <span class="fn">strlen</span>(msg)); <span class="cm">// 5</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Core Concepts</div>
+        <ul>
+          <li><strong>Array declaration:</strong> <code>int arr[10];</code> — uninitialized arrays contain garbage!</li>
+          <li><strong>Array bounds:</strong> C does NOT check bounds — writing past the end is undefined behavior</li>
+          <li><strong>C-strings:</strong> Null-terminated char arrays. Functions: <code>strlen</code>, <code>strcpy</code>, <code>strcat</code>, <code>strcmp</code>, <code>sprintf</code></li>
+          <li><strong>Multi-dimensional arrays:</strong> <code>int grid[3][4];</code> stored row-major</li>
+          <li><strong>Array ↔ pointer duality:</strong> <code>arr</code> is essentially a pointer to <code>arr[0]</code> (previews week 4)</li>
+        </ul>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">⚠️ Critical Warning</div>
+        <div class="warn-box">
+          <div class="warn-title">⚠️ Buffer Overflow</div>
+          <p>Never use <code>gets()</code> — it's been removed from C11. Use <code>fgets(buf, sizeof(buf), stdin)</code> instead. Always ensure your destination buffer is large enough before copying strings.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🏋️ Exercises</div>
+        <ol>
+          <li>Implement bubble sort and selection sort on an integer array</li>
+          <li>Write <code>myStrlen</code>, <code>myStrcpy</code>, <code>myStrcat</code> from scratch</li>
+          <li>Count vowels, consonants, and spaces in a string</li>
+          <li>Transpose a 3×3 matrix stored as a 2D array</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">📦 Mini Project — Week 3</div>
+        <p><strong>Student Grade Manager:</strong> Store names (char arrays) and grades (float array) for N students. Compute average, find highest/lowest scorer, print a sorted leaderboard.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week-card" id="wk4">
+    <div class="week-header" onclick="toggleWeek('wk4')">
+      <span class="week-num" style="color:#c77dff">Week 04</span>
+      <div class="week-title-block">
+        <div class="week-title">Pointers — The Heart of C</div>
+        <div class="week-subtitle">Pointer arithmetic, pointer to pointer, function pointers</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+
+      <div class="concept-block">
+        <div class="concept-label">🐍 Coming from Python</div>
+        <p>In Python, everything is an object reference — you never see addresses. In C, a <strong>pointer</strong> is a variable that holds a memory address. This is the concept that trips most beginners but unlocks everything — hardware access, dynamic memory, efficient data structures, and OS interfaces.</p>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Core Concepts</div>
+        <pre><span class="type">int</span> x = <span class="num">42</span>;
+<span class="type">int</span> *p = &amp;x;      <span class="cm">// p holds the address of x</span>
+
+<span class="fn">printf</span>(<span class="str">"%p\n"</span>, p);    <span class="cm">// prints address e.g. 0x7ffd...</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, *p);   <span class="cm">// dereference: prints 42</span>
+
+*p = <span class="num">100</span>;  <span class="cm">// modifies x through the pointer!</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, x);   <span class="cm">// prints 100</span></pre>
+        <ul>
+          <li><strong>&amp; (address-of):</strong> Gets the memory address of a variable</li>
+          <li><strong>* (dereference):</strong> Follows the pointer to read/write the value it points to</li>
+          <li><strong>Pointer arithmetic:</strong> <code>p + 1</code> moves forward by <code>sizeof(*p)</code> bytes — crucial for arrays</li>
+          <li><strong>NULL pointer:</strong> Always initialize pointers; uninitialized pointers cause crashes</li>
+          <li><strong>Pointer to pointer:</strong> <code>int **pp</code> — used for modifying pointers in functions, 2D arrays</li>
+          <li><strong>Function pointers:</strong> <code>int (*fn)(int, int)</code> — enables callbacks, dispatch tables (key in embedded/robotics)</li>
+        </ul>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">💡 Pass by Reference (unlike Python's default)</div>
+        <pre><span class="cm">// Without pointer: x is NOT modified</span>
+<span class="kw">void</span> <span class="fn">badSwap</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="type">int</span> t=a; a=b; b=t; }
+
+<span class="cm">// With pointer: x IS modified</span>
+<span class="kw">void</span> <span class="fn">swap</span>(<span class="type">int</span> *a, <span class="type">int</span> *b) {
+    <span class="type">int</span> t = *a;
+    *a = *b;
+    *b = t;
+}
+<span class="cm">// Call it:</span>
+<span class="fn">swap</span>(&amp;x, &amp;y);</pre>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🏋️ Exercises</div>
+        <ol>
+          <li>Implement <code>swap(int *a, int *b)</code> and verify with prints</li>
+          <li>Traverse an array using pointer arithmetic (no <code>[]</code> syntax)</li>
+          <li>Write a function that takes a <code>char *</code> and reverses the string in-place</li>
+          <li>Create a function pointer array to dispatch arithmetic operations</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">📦 Mini Project — Week 4</div>
+        <p><strong>Sorting with Function Pointers:</strong> Implement a generic <code>sort()</code> that accepts an array and a comparator function pointer, so callers can sort ascending, descending, or by custom criteria.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week-card" id="wk5">
+    <div class="week-header" onclick="toggleWeek('wk5')">
+      <span class="week-num" style="color:#ffd166">Week 05</span>
+      <div class="week-title-block">
+        <div class="week-title">Dynamic Memory Management</div>
+        <div class="week-subtitle">malloc, calloc, realloc, free, memory leaks, valgrind</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+
+      <div class="concept-block">
+        <div class="concept-label">🐍 Coming from Python</div>
+        <p>Python manages memory for you via garbage collection. In C, <strong>you are the memory manager.</strong> You allocate memory on the heap with <code>malloc</code>, and you must free it when done. Forgetting to free causes memory leaks; freeing twice or using freed memory causes crashes. This is hard but powerful — it's why C is used in embedded and real-time systems.</p>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Core Concepts</div>
+        <pre><span class="kw">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="cm">// Allocate array of 10 ints on the heap</span>
+<span class="type">int</span> *arr = (<span class="type">int</span>*)<span class="fn">malloc</span>(<span class="num">10</span> * <span class="kw">sizeof</span>(<span class="type">int</span>));
+<span class="kw">if</span> (arr == NULL) { <span class="cm">/* always check! */</span> }
+
+<span class="cm">// calloc: allocates AND zeroes memory</span>
+<span class="type">int</span> *zeros = (<span class="type">int</span>*)<span class="fn">calloc</span>(<span class="num">10</span>, <span class="kw">sizeof</span>(<span class="type">int</span>));
+
+<span class="cm">// realloc: resize an existing allocation</span>
+arr = (<span class="type">int</span>*)<span class="fn">realloc</span>(arr, <span class="num">20</span> * <span class="kw">sizeof</span>(<span class="type">int</span>));
+
+<span class="cm">// free: ALWAYS free when done</span>
+<span class="fn">free</span>(arr);
+arr = NULL; <span class="cm">// good practice: avoid dangling pointer</span></pre>
+        <ul>
+          <li><strong>Stack vs Heap:</strong> Local variables are on the stack (fast, limited, auto-freed). <code>malloc</code> allocates on the heap (slower, large, manual)</li>
+          <li><strong>Memory leak:</strong> Allocated memory that's never freed. In robotics/embedded, this kills long-running programs</li>
+          <li><strong>Dangling pointer:</strong> Pointer that references freed memory — accessing it is undefined behavior</li>
+        </ul>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🔍 Debug with Valgrind</div>
+        <pre><span class="cm"># Install</span>
+sudo apt install valgrind
+
+<span class="cm"># Run your program through valgrind</span>
+valgrind --leak-check=full ./myprogram
+
+<span class="cm"># Output will show memory leaks, invalid reads/writes</span></pre>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🏋️ Exercises</div>
+        <ol>
+          <li>Implement a dynamic integer array that doubles in capacity when full</li>
+          <li>Write a function that duplicates a string on the heap (like <code>strdup</code>)</li>
+          <li>Create a 2D dynamic matrix (pointer to pointer) with variable rows/cols</li>
+          <li>Run valgrind on your week 3 project and fix any issues</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">📦 Mini Project — Week 5</div>
+        <p><strong>Dynamic Linked List:</strong> Build a singly linked list with <code>append</code>, <code>prepend</code>, <code>delete</code>, <code>search</code>, and <code>print</code> operations. Free all nodes properly on exit. Verify with valgrind.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week-card" id="wk6">
+    <div class="week-header" onclick="toggleWeek('wk6')">
+      <span class="week-num" style="color:#ef476f">Week 06</span>
+      <div class="week-title-block">
+        <div class="week-title">Structs & Custom Data Types</div>
+        <div class="week-subtitle">struct, typedef, enum, nested structs, struct pointers</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+
+      <div class="concept-block">
+        <div class="concept-label">🐍 Coming from Python</div>
+        <p>Python's <code>class</code> bundles data and methods together. C's <code>struct</code> bundles only <strong>data</strong> — no built-in methods (but you can achieve OOP-like patterns using function pointers!). This is the backbone of all complex C programs.</p>
+        <div class="compare-box">
+          <div><div class="lang-label py">Python</div><pre>class Robot:
+    def __init__(self, name, x, y):
+        self.name = name
+        self.x = x
+        self.y = y</pre></div>
+          <div><div class="lang-label c">C</div><pre><span class="kw">typedef struct</span> {
+    <span class="type">char</span> name[<span class="num">32</span>];
+    <span class="type">float</span> x, y;
+} Robot;
+
+Robot r1 = {<span class="str">"R2D2"</span>, <span class="num">0.0</span>, <span class="num">0.0</span>};</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Core Concepts</div>
+        <pre><span class="cm">// Arrow operator for pointer-to-struct</span>
+Robot *rp = &amp;r1;
+<span class="fn">printf</span>(<span class="str">"%s at (%.1f, %.1f)\n"</span>,
+       rp-&gt;name, rp-&gt;x, rp-&gt;y);
+
+<span class="cm">// Equivalent to: (*rp).name</span>
+
+<span class="cm">// Enum for readable constants</span>
+<span class="kw">typedef enum</span> { IDLE, MOVING, ERROR } RobotState;
+
+<span class="cm">// Nested struct</span>
+<span class="kw">typedef struct</span> {
+    Robot body;
+    RobotState state;
+    <span class="type">float</span> battery;
+} FullRobot;</pre>
+        <ul>
+          <li><strong>typedef:</strong> Creates an alias — <code>typedef struct Point { ... } Point;</code> lets you write <code>Point p</code> instead of <code>struct Point p</code></li>
+          <li><strong>Arrow (<code>-&gt;</code>) vs dot (<code>.</code>):</strong> Use <code>.</code> for struct values, <code>-&gt;</code> for struct pointers</li>
+          <li><strong>Struct padding:</strong> The compiler may add padding bytes for alignment — use <code>sizeof()</code> to check</li>
+        </ul>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🏋️ Exercises</div>
+        <ol>
+          <li>Define a <code>Point</code> struct and write functions to compute distance between two points</li>
+          <li>Create a <code>Stack</code> struct backed by a dynamic array with push/pop/peek</li>
+          <li>Model a simple <code>Sensor</code> struct with type (enum), value, and timestamp</li>
+          <li>Build a "polymorphic" shape (Circle, Rectangle) using function pointers in a struct</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">📦 Mini Project — Week 6</div>
+        <p><strong>Robot State Machine:</strong> Model a robot with a <code>Robot</code> struct (position, heading, battery, state). Implement transitions between states (IDLE → MOVING → CHARGING → IDLE) as functions that take and update a <code>Robot*</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 7 -->
+  <div class="week-card" id="wk7">
+    <div class="week-header" onclick="toggleWeek('wk7')">
+      <span class="week-num" style="color:#06d6a0">Week 07</span>
+      <div class="week-title-block">
+        <div class="week-title">File I/O & the Preprocessor</div>
+        <div class="week-subtitle">fopen, fread, fwrite, #define, #include, header files, Makefiles</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Core Concepts — File I/O</div>
+        <pre><span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="cm">// Open for writing</span>
+FILE *f = <span class="fn">fopen</span>(<span class="str">"log.txt"</span>, <span class="str">"w"</span>);
+<span class="kw">if</span> (!f) { <span class="fn">perror</span>(<span class="str">"fopen"</span>); <span class="kw">return</span> <span class="num">1</span>; }
+
+<span class="fn">fprintf</span>(f, <span class="str">"Robot at %.2f, %.2f\n"</span>, x, y);
+<span class="fn">fclose</span>(f);
+
+<span class="cm">// Read line by line</span>
+FILE *r = <span class="fn">fopen</span>(<span class="str">"data.csv"</span>, <span class="str">"r"</span>);
+<span class="type">char</span> line[<span class="num">256</span>];
+<span class="kw">while</span> (<span class="fn">fgets</span>(line, <span class="kw">sizeof</span>(line), r)) {
+    <span class="cm">// process line</span>
+}
+<span class="fn">fclose</span>(r);</pre>
+
+        <ul>
+          <li>Mode strings: <code>"r"</code> read, <code>"w"</code> write (truncate), <code>"a"</code> append, <code>"rb"</code>/<code>"wb"</code> binary</li>
+          <li><code>fread</code>/<code>fwrite</code>: Read/write raw binary data — essential for sensor data logging</li>
+          <li><code>fseek</code>/<code>ftell</code>: Navigate within files</li>
+        </ul>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Headers & Multi-file Programs</div>
+        <pre><span class="cm">// robot.h — declarations only</span>
+<span class="kw">#ifndef</span> ROBOT_H
+<span class="kw">#define</span> ROBOT_H
+
+<span class="kw">typedef struct</span> { <span class="type">float</span> x, y; } Robot;
+<span class="kw">void</span> <span class="fn">moveRobot</span>(Robot *r, <span class="type">float</span> dx, <span class="type">float</span> dy);
+
+<span class="kw">#endif</span>
+
+<span class="cm">// robot.c — definitions</span>
+<span class="kw">#include</span> <span class="str">"robot.h"</span>
+<span class="kw">void</span> <span class="fn">moveRobot</span>(Robot *r, <span class="type">float</span> dx, <span class="type">float</span> dy) {
+    r-&gt;x += dx; r-&gt;y += dy;
+}</pre>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🔨 Basic Makefile</div>
+        <pre>CC = gcc
+CFLAGS = -Wall -g
+
+all: robot_sim
+
+robot_sim: main.o robot.o
+	$(CC) $(CFLAGS) -o robot_sim main.o robot.o
+
+main.o: main.c robot.h
+	$(CC) $(CFLAGS) -c main.c
+
+clean:
+	rm -f *.o robot_sim</pre>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🏋️ Exercises</div>
+        <ol>
+          <li>Write a program that logs robot position to a CSV file every "tick"</li>
+          <li>Read that CSV back and compute total distance traveled</li>
+          <li>Split your week 5 linked list into .h and .c files, build with a Makefile</li>
+          <li>Use <code>#define</code> macros for constants (MAX_SPEED, PI, etc.)</li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">📦 Mini Project — Week 7</div>
+        <p><strong>Sensor Data Logger:</strong> Simulate 5 sensor readings per second, log them as binary structs to a file, then write a separate reader program that parses and summarizes the log (min, max, average).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 8 -->
+  <div class="week-card" id="wk8">
+    <div class="week-header" onclick="toggleWeek('wk8')">
+      <span class="week-num" style="color:#118ab2">Week 08</span>
+      <div class="week-title-block">
+        <div class="week-title">Systems Programming & POSIX</div>
+        <div class="week-subtitle">Processes, signals, pipes, threads (pthreads), timers</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+
+      <div class="concept-block">
+        <div class="concept-label">📖 Core Concepts</div>
+        <ul>
+          <li><strong>Processes:</strong> <code>fork()</code>, <code>exec()</code>, <code>wait()</code> — create and manage child processes</li>
+          <li><strong>Signals:</strong> <code>SIGINT</code>, <code>SIGTERM</code>, <code>SIGUSR1</code> — async notifications between processes. Use <code>signal()</code> or <code>sigaction()</code></li>
+          <li><strong>Pipes:</strong> <code>pipe()</code>, <code>read()</code>, <code>write()</code> — IPC between processes. Foundation of shell piping</li>
+          <li><strong>POSIX threads:</strong> <code>pthread_create</code>, <code>pthread_join</code>, <code>pthread_mutex_lock</code> — concurrent execution</li>
+          <li><strong>Time:</strong> <code>clock_gettime()</code>, <code>nanosleep()</code> — crucial for real-time robotics loops</li>
+        </ul>
+
+        <pre><span class="kw">#include</span> <span class="str">&lt;pthread.h&gt;</span>
+
+<span class="kw">void</span>* <span class="fn">sensorThread</span>(<span class="kw">void</span> *arg) {
+    <span class="kw">while</span> (<span class="num">1</span>) {
+        <span class="fn">readSensor</span>();
+        <span class="fn">usleep</span>(<span class="num">10000</span>); <span class="cm">// 10ms</span>
+    }
+    <span class="kw">return</span> NULL;
+}
+
+<span class="cm">// In main:</span>
+pthread_t tid;
+<span class="fn">pthread_create</span>(&amp;tid, NULL, sensorThread, NULL);
+<span class="cm">// compile with: gcc -lpthread</span></pre>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">🏋️ Exercises</div>
+        <ol>
+          <li>Write a program that spawns a child process to run <code>ls -la</code></li>
+          <li>Gracefully handle <code>SIGINT</code> (Ctrl-C) to cleanup before exit</li>
+          <li>Build a producer-consumer with two threads and a mutex-protected queue</li>
+          <li>Measure and print loop execution time with <code>clock_gettime</code></li>
+        </ol>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">📦 Mini Project — Week 8</div>
+        <p><strong>Multi-threaded Robot Controller:</strong> Sensor thread reads data every 10ms. Control thread processes it every 50ms. Communication thread logs to file every 100ms. Protect shared state with mutexes. Handle SIGINT for clean shutdown.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 9-10 -->
+  <div class="week-card" id="wk9">
+    <div class="week-header" onclick="toggleWeek('wk9')">
+      <span class="week-num" style="color:#00d4ff">Weeks 09–10</span>
+      <div class="week-title-block">
+        <div class="week-title">Capstone Projects</div>
+        <div class="week-subtitle">Choose one (or more) real-world projects to consolidate everything</div>
+      </div>
+      <span class="week-toggle">+</span>
+    </div>
+    <div class="week-body">
+      <div class="concept-block">
+        <div class="concept-label">🤖 Robotics Track</div>
+        <div class="tip-box">
+          <div class="tip-title">Project A — Robot Simulator</div>
+          <p>Build a 2D grid-based robot simulator in C. Features: robot struct with state machine, pathfinding (BFS/DFS), obstacle avoidance, sensor simulation, position logging to CSV, multi-threaded control loop, and SIGINT-clean shutdown. Use Makefile for build.</p>
+        </div>
+      </div>
+      <div class="concept-block">
+        <div class="concept-label">⚙️ Systems Track</div>
+        <div class="tip-box">
+          <div class="tip-title">Project B — Mini Shell</div>
+          <p>Implement a basic Unix shell in C: read commands, parse arguments, fork/exec to run them, handle pipes (<code>ls | grep foo</code>), implement <code>cd</code> as a builtin, handle <code>SIGCHLD</code> for background jobs. This is used in many CS interviews.</p>
+        </div>
+      </div>
+      <div class="concept-block">
+        <div class="concept-label">🗄️ Data Structures Track</div>
+        <div class="tip-box">
+          <div class="tip-title">Project C — Generic Data Structure Library</div>
+          <p>Build a reusable C library with: dynamic array, linked list, hash map (with open addressing), and binary search tree. All generic via <code>void*</code> and function pointers. Full header files, Makefile, and a test harness. Optional: measure performance.</p>
+        </div>
+      </div>
+      <div class="concept-block">
+        <div class="concept-label">💾 Embedded/Low-level Track</div>
+        <div class="tip-box">
+          <div class="tip-title">Project D — Serial Protocol Parser</div>
+          <p>Implement a binary packet protocol: define packet structs, write encoder/decoder, checksum validation (CRC8 or XOR), handle partial reads, log to file. Simulate over a pipe. This is directly applicable to UART/I2C/SPI in embedded systems.</p>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <div class="concept-label">📖 What to Learn Next</div>
+        <div class="pills">
+          <span class="pill pill-blue">C++ (OOP + RAII)</span>
+          <span class="pill pill-green">Embedded C (AVR/ARM)</span>
+          <span class="pill pill-orange">ROS (Robot OS)</span>
+          <span class="pill pill-purple">Linux Kernel Modules</span>
+          <span class="pill pill-blue">Assembly (x86/ARM)</span>
+          <span class="pill pill-green">RTOS (FreeRTOS)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end weeks-grid -->
+</div><!-- end roadmap tab -->
+
+<!-- ===================== RESOURCES TAB ===================== -->
+<div id="tab-resources" class="tab-panel">
+<div class="section-header">
+  <h2>Books, Courses & Tutorials</h2>
+  <p>Curated resources organized by type and difficulty.</p>
+</div>
+<div class="resources-grid">
+
+  <div class="res-card">
+    <div class="res-type" style="color:#ffd166">📕 The Classic Book</div>
+    <h3>The C Programming Language (K&R)</h3>
+    <p>Written by Kernighan & Ritchie — the inventors of C. Dense but definitive. Every serious C programmer reads this. Focus on chapters 1–6 early on.</p>
+    <a class="res-link" href="https://www.amazon.com/Programming-Language-2nd-Brian-Kernighan/dp/0131103628" target="_blank">→ Amazon</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#ffd166">📗 Modern & Beginner-Friendly</div>
+    <h3>C Programming: A Modern Approach (King)</h3>
+    <p>Far more approachable than K&R. Comprehensive coverage of C99. Great exercises at the end of each chapter. Best first book if K&R feels too terse.</p>
+    <a class="res-link" href="https://www.amazon.com/C-Programming-Modern-Approach-2nd/dp/0393979504" target="_blank">→ Amazon</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#ffd166">📘 Systems Depth</div>
+    <h3>Computer Systems: A Programmer's Perspective (CS:APP)</h3>
+    <p>Covers C in the context of how computers actually work: memory, assembly, linking, processes, threads. Essential for systems programming. Used at CMU.</p>
+    <a class="res-link" href="https://csapp.cs.cmu.edu/" target="_blank">→ csapp.cs.cmu.edu</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#00d4ff">🎬 Best Free Video Course</div>
+    <h3>CS50x — Harvard (edX)</h3>
+    <p>World's most popular intro CS course. Weeks 1–5 cover C thoroughly with great problem sets (implementing data structures, utilities). Free to audit.</p>
+    <a class="res-link" href="https://cs50.harvard.edu/x/" target="_blank">→ cs50.harvard.edu/x</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#00d4ff">🎬 YouTube</div>
+    <h3>Jacob Sorber — C Programming</h3>
+    <p>Excellent YouTube channel focused on C for systems/embedded. Clear explanations of pointers, memory, sockets, and POSIX. Perfect for your robotics goals.</p>
+    <a class="res-link" href="https://www.youtube.com/c/JacobSorber" target="_blank">→ YouTube</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#00d4ff">🎬 YouTube</div>
+    <h3>Low Level Learning</h3>
+    <p>Deep dives into memory, pointers, assembly, and OS concepts. Great companion to your roadmap for understanding what's happening under the hood.</p>
+    <a class="res-link" href="https://www.youtube.com/@LowLevelLearning" target="_blank">→ YouTube</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#7fff6b">🌐 Interactive</div>
+    <h3>Learn-C.org</h3>
+    <p>Browser-based interactive C exercises. Great for practicing syntax without setup friction. Start here for the first 2 weeks if environment setup feels daunting.</p>
+    <a class="res-link" href="https://www.learn-c.org/" target="_blank">→ learn-c.org</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#7fff6b">🌐 Reference</div>
+    <h3>cppreference.com — C Standard Library</h3>
+    <p>The best online reference for all C standard library functions. Accurate, detailed, and includes examples. Bookmark this now.</p>
+    <a class="res-link" href="https://en.cppreference.com/w/c" target="_blank">→ cppreference.com</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#c77dff">🤖 Robotics Specific</div>
+    <h3>Programming Embedded Systems (O'Reilly)</h3>
+    <p>Covers C specifically for embedded/robotics contexts: memory-mapped I/O, interrupts, device drivers, real-time loops. By Michael Barr. Practical and hands-on.</p>
+    <a class="res-link" href="https://www.oreilly.com/library/view/programming-embedded-systems/0596009836/" target="_blank">→ O'Reilly</a>
+  </div>
+
+  <div class="res-card">
+    <div class="res-type" style="color:#c77dff">🤖 Practice</div>
+    <h3>Exercism — C Track</h3>
+    <p>80+ exercises graded by difficulty. Community mentors provide feedback on your solutions. Excellent for building fluency after weeks 1–4.</p>
+    <a class="res-link" href="https://exercism.org/tracks/c" target="_blank">→ exercism.org/tracks/c</a>
+  </div>
+
+</div>
+</div>
+
+<!-- ===================== TOOLS TAB ===================== -->
+<div id="tab-tools" class="tab-panel">
+<div class="section-header">
+  <h2>Tools & IDEs</h2>
+  <p>Everything you need to write, compile, debug, and profile C programs.</p>
+</div>
+<div class="tools-grid">
+
+  <div class="tool-card">
+    <div class="tool-icon">🔨</div>
+    <h3>GCC (GNU Compiler)</h3>
+    <p>The standard C compiler on Linux/Mac. Always compile with <code>gcc -Wall -Wextra -g</code>. The <code>-g</code> flag adds debug symbols for GDB. Available on Windows via MinGW or WSL.</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">🍎</div>
+    <h3>Clang (macOS)</h3>
+    <p>Apple's default C compiler. Often gives better error messages than GCC. Comes pre-installed on macOS via Xcode Command Line Tools. <code>clang -Wall -g</code></p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">🐛</div>
+    <h3>GDB — GNU Debugger</h3>
+    <p>Step through code line by line, set breakpoints, inspect variables and memory. Essential skill. Basic commands: <code>break main</code>, <code>run</code>, <code>next</code>, <code>print x</code>, <code>backtrace</code></p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">🔍</div>
+    <h3>Valgrind</h3>
+    <p>Detects memory leaks, invalid memory accesses, use-after-free, and double-free errors. Run <code>valgrind --leak-check=full ./prog</code>. Linux-only (use WSL on Windows).</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">📝</div>
+    <h3>VS Code + C/C++ Extension</h3>
+    <p>Best general-purpose IDE for beginners. Install the "C/C++" extension by Microsoft. Configure <code>tasks.json</code> for build and <code>launch.json</code> for GDB debugging with a UI.</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">🖥</div>
+    <h3>CLion (JetBrains)</h3>
+    <p>Full-featured C/C++ IDE with excellent refactoring, debugger integration, and Valgrind plugin. Free for students via JetBrains Education. Best professional option.</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">🌐</div>
+    <h3>Compiler Explorer (godbolt.org)</h3>
+    <p>Paste C code and instantly see the assembly output. Essential for understanding what the compiler does. Great for comparing <code>-O0</code> vs <code>-O2</code> optimizations.</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">⚡</div>
+    <h3>AddressSanitizer (ASan)</h3>
+    <p>Compile with <code>-fsanitize=address</code> to detect memory bugs at runtime with minimal overhead. Much faster than Valgrind. Use both: ASan for fast iteration, Valgrind for thorough checks.</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">📊</div>
+    <h3>gprof / perf</h3>
+    <p>Profile your C programs to find bottlenecks. <code>gprof</code>: compile with <code>-pg</code>, run program, then <code>gprof ./prog gmon.out</code>. <code>perf</code>: Linux-native, extremely powerful for systems work.</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">🔄</div>
+    <h3>Make / CMake</h3>
+    <p><code>make</code> for simple projects (learn this first). <code>cmake</code> for multi-platform projects — required by ROS and many robotics frameworks. Learn Makefiles in week 7.</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">🐧</div>
+    <h3>WSL2 (Windows Only)</h3>
+    <p>If on Windows, use Windows Subsystem for Linux 2. Gets you a real Linux environment with GCC, GDB, Valgrind, pthreads, and all POSIX APIs. Strongly recommended over Cygwin or MinGW.</p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon">🧹</div>
+    <h3>clang-format & clang-tidy</h3>
+    <p>Auto-format your code (<code>clang-format</code>) and get lint warnings about risky patterns (<code>clang-tidy</code>). Integrate into VS Code for format-on-save. Builds good habits early.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- ===================== MISTAKES TAB ===================== -->
+<div id="tab-mistakes" class="tab-panel">
+<div class="section-header">
+  <h2>Common Beginner Mistakes</h2>
+  <p>These are the pitfalls that waste hours. Read them now; recognize them in the wild.</p>
+</div>
+<div class="mistakes-list">
+
+  <div class="mistake-card">
+    <h3>1. Forgetting to Initialize Variables</h3>
+    <p>In Python, uninitialized variables throw <code>NameError</code>. In C, <code>int x;</code> gives <code>x</code> a garbage value — random bits already in memory. Always initialize: <code>int x = 0;</code>, and especially <code>int arr[10] = {0};</code> for arrays.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>2. Off-by-One in Arrays</h3>
+    <p>C arrays are 0-indexed and bounds are NOT checked. Accessing <code>arr[10]</code> on an array of size 10 is undefined behavior — it might crash, corrupt memory, or silently do the wrong thing. The worst bugs say nothing; they just produce wrong output.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>3. Using = Instead of == in Conditions</h3>
+    <p><code>if (x = 5)</code> assigns 5 to x (always true!). <code>if (x == 5)</code> compares. Pro trick: write <code>if (5 == x)</code> — if you accidentally use <code>=</code>, the compiler will error because you can't assign to a literal.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>4. Missing break in switch Statements</h3>
+    <p>C switch cases fall through by default. Without <code>break</code>, execution continues into the next case. This is occasionally useful but almost always a bug. Always add <code>break</code> unless fall-through is intentional and commented.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>5. Returning Pointers to Local Variables</h3>
+    <p><code>return &localVar;</code> is a dangling pointer — the variable is destroyed when the function returns. The memory is then reused. Use <code>malloc</code> to allocate on the heap (and free it later), or pass a pointer as a parameter for the function to fill.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>6. Memory Leaks & Double Free</h3>
+    <p>Every <code>malloc</code> needs exactly one <code>free</code>. Forgetting leaks memory. Freeing twice corrupts the heap allocator and causes crashes. Set pointers to <code>NULL</code> after freeing: <code>free(p); p = NULL;</code>. Use Valgrind to catch these.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>7. Using gets() or scanf("%s") for Strings</h3>
+    <p><code>gets()</code> has no bounds checking and was removed from C11. <code>scanf("%s")</code> also doesn't limit input length. Use <code>fgets(buf, sizeof(buf), stdin)</code> or <code>scanf("%255s", buf)</code> with an explicit limit.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>8. Integer Overflow (Silent!)</h3>
+    <p>A signed <code>int</code> on most systems is 32-bit: max value ~2.1 billion. <code>2147483647 + 1</code> wraps to a negative number with no warning or error. Use <code>long long</code> or <code>uint64_t</code> for large values, and be careful with multiplication before division.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>9. Comparing Strings with ==</h3>
+    <p>From Python: <code>if (name == "Alice")</code>. In C, this compares <em>pointer addresses</em>, not string content — it's almost always false (or coincidentally true). Use <code>strcmp(name, "Alice") == 0</code> instead.</p>
+  </div>
+
+  <div class="mistake-card">
+    <h3>10. Ignoring Compiler Warnings</h3>
+    <p>Warnings in C are often errors-in-waiting. Always compile with <code>-Wall -Wextra</code> and treat warnings as errors with <code>-Werror</code> during learning. A warning about an implicit conversion or unused variable is the compiler telling you something is wrong.</p>
+  </div>
+
+</div>
+</div>
+
+<!-- ===================== DEBUG TAB ===================== -->
+<div id="tab-debug" class="tab-panel">
+<div class="section-header">
+  <h2>Debugging & Efficiency Tips</h2>
+  <p>How to debug fast, build good habits, and accelerate your learning.</p>
+</div>
+
+<div class="mistakes-list">
+
+  <div class="mistake-card" style="border-color:rgba(0,212,255,0.3);">
+    <h3 style="color:var(--accent)">GDB Survival Cheat Sheet</h3>
+    <pre style="margin-top:10px"><span class="cm"># Compile with debug symbols</span>
+gcc -g -o myprog myprog.c
+
+<span class="cm"># Launch GDB</span>
+gdb ./myprog
+
+<span class="cm"># Key commands inside GDB:</span>
+(gdb) break main       <span class="cm"># set breakpoint at main</span>
+(gdb) break 42         <span class="cm"># set breakpoint at line 42</span>
+(gdb) run              <span class="cm"># start the program</span>
+(gdb) next             <span class="cm"># step over (n)</span>
+(gdb) step             <span class="cm"># step into function (s)</span>
+(gdb) print x          <span class="cm"># print variable x</span>
+(gdb) print *ptr       <span class="cm"># dereference pointer</span>
+(gdb) backtrace        <span class="cm"># show call stack (bt)</span>
+(gdb) watch x          <span class="cm"># break when x changes</span>
+(gdb) continue         <span class="cm"># resume until next break (c)</span>
+(gdb) quit             <span class="cm"># exit GDB</span></pre>
+  </div>
+
+  <div class="mistake-card" style="border-color:rgba(0,212,255,0.3);">
+    <h3 style="color:var(--accent)">Compile Flags That Save You</h3>
+    <pre><span class="cm"># The flags to always use during development:</span>
+gcc -Wall -Wextra -g -fsanitize=address,undefined \
+    -o myprog myprog.c
+
+<span class="cm"># -Wall        : all common warnings</span>
+<span class="cm"># -Wextra      : extra warnings</span>
+<span class="cm"># -g           : debug symbols for GDB</span>
+<span class="cm"># -fsanitize=address   : detect memory bugs at runtime</span>
+<span class="cm"># -fsanitize=undefined : detect UB (signed overflow, etc.)</span>
+
+<span class="cm"># For release (optimized, no debug):</span>
+gcc -O2 -o myprog myprog.c</pre>
+  </div>
+
+  <div class="mistake-card" style="border-color:rgba(0,212,255,0.3);">
+    <h3 style="color:var(--accent)">Debugging Strategy</h3>
+    <p style="margin-bottom:10px">Use this process when stuck:</p>
+    <ol style="padding-left:20px; font-size:0.88rem; line-height:2">
+      <li><strong>Read the error message top-to-bottom</strong> — the first error is often the real one</li>
+      <li><strong>Isolate:</strong> Comment out code until the bug disappears — last removed block is suspect</li>
+      <li><strong>Add printf breadcrumbs</strong> — print variable values at key points</li>
+      <li><strong>Use GDB backtrace</strong> on a crash — it tells you exactly where and what was on the call stack</li>
+      <li><strong>Run under Valgrind</strong> for memory-related crashes</li>
+      <li><strong>Check assumptions:</strong> Are arrays the size you think? Are pointers NULL? Did malloc return NULL?</li>
+      <li><strong>Rubber duck:</strong> Explain the code out loud line by line — bugs often reveal themselves</li>
+    </ol>
+  </div>
+
+  <div class="mistake-card" style="border-color:rgba(0,212,255,0.3);">
+    <h3 style="color:var(--accent)">Learning Efficiently</h3>
+    <ul style="padding-left:20px; font-size:0.88rem; line-height:2">
+      <li><strong>Code every day</strong> — even 20 minutes beats 3-hour marathon sessions twice a week</li>
+      <li><strong>Type code; don't copy-paste</strong> — muscle memory and typo debugging are part of learning</li>
+      <li><strong>Read other people's C</strong> — study Redis, SQLite, or the Linux kernel source on GitHub</li>
+      <li><strong>Draw memory diagrams</strong> — for pointers and structs, draw boxes and arrows on paper</li>
+      <li><strong>Build something you care about</strong> — motivation matters; adapt exercises to robotics themes</li>
+      <li><strong>Use Compiler Explorer</strong> (godbolt.org) to see what your C becomes in assembly</li>
+      <li><strong>Read the man pages</strong> — <code>man 3 malloc</code>, <code>man 3 fopen</code> — learn to read primary docs</li>
+      <li><strong>Commit to Git</strong> — even personal projects. Easy to rollback broken experiments</li>
+    </ul>
+  </div>
+
+  <div class="mistake-card" style="border-color:rgba(0,212,255,0.3);">
+    <h3 style="color:var(--accent)">Python → C Mental Model Shifts</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; font-size:0.83rem">
+      <div>
+        <div style="color:var(--muted); font-family:monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px">Python thinking</div>
+        <ul style="padding-left:16px; line-height:2; color:var(--text)">
+          <li>Variables hold objects</li>
+          <li>Strings are objects</li>
+          <li>Lists resize automatically</li>
+          <li>GC frees memory</li>
+          <li>Everything is a reference</li>
+          <li>Bounds checked</li>
+        </ul>
+      </div>
+      <div>
+        <div style="color:var(--accent); font-family:monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px">C thinking</div>
+        <ul style="padding-left:16px; line-height:2; color:var(--text)">
+          <li>Variables hold values/bits</li>
+          <li>Strings are char arrays + \0</li>
+          <li>Arrays are fixed; use malloc to grow</li>
+          <li>You free memory manually</li>
+          <li>Pointers are explicit addresses</li>
+          <li>You own bounds checking</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- end debug tab -->
+
+</main>
+</div>
+
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleWeek(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+// Open week 1 by default
+document.addEventListener('DOMContentLoaded', () => {
+  toggleWeek('wk1');
+});
+</script>
+</body>
+</html>

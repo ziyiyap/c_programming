@@ -10,7 +10,7 @@ int main() {
     printf("Enter age and height: ");
     scanf("%d %lf",&age, &height); //Except for strings, all variable datatypes require & to address it. without &: You are 3223552 years old. The number given is the amount of bytes of the variable.
     // user input must be passed as: int float
-    printf("You are %d years old\n", age); //scanf needs to declare a & onto the variable while printf does not.
+    printf("You are %d years old\n", age); //scanf needs to declare & onto the variable while printf does not.
     printf("You are %.2f cm tall\n", height);
 
     printf("INFO:\n %-10s | %3d | %.2f\n", name, age, height);

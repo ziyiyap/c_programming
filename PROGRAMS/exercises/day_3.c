@@ -1,11 +1,6 @@
 #include <stdio.h>
 
 int main() {
-
-
-
-
-
     //E3
     // syntax: fgets(name, sizeof(name), stdin) <- stdin means standard input = keyboard
     char name[50];

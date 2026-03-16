@@ -126,7 +126,7 @@ int main() {
     int i;
     printf("Enter an integer: ");
     scanf("%d",&i);
-
+    //SUM OF DIGITS
     int sum = 0;
     while (i != 0) {
         int remainder = i % 10;

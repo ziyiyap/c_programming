@@ -8,7 +8,7 @@ void printh(char from, char to) {
     printf("%c -> %c\n", from, to);
 }
 
-void hanoi(int n, char from, char to, char via) { // n-disks, A, B, C rods
+void hanoi(long long n, char from, char to, char via) { // n-disks, A, B, C rods
     if (n != 0) {
         hanoi(n-1, from, via,to); // 'A', 'B', 'C'
         printh(from,to);
@@ -62,7 +62,7 @@ int main() {
     printf("%lld\n",fib(40));
     printf("%lld\n",sumDigits(9999));
 
-    hanoi(3, 'A','C','B');
+    hanoi(8, 'A','C','B');
     return 0;
 }
 // factorial(5) -> result = 1 * parameter -> return factorial(5-1) -> result = 5*4 -> return factorial(4-1) -> result = 20*3 -> return factorial(3-1) -> result = 60 * 2 -> return factorial(2-1) -> result = 120*1

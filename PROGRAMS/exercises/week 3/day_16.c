@@ -108,7 +108,7 @@ int main() {
     printf("%d\n",countWords(""));
 
     //E3
-    char str_[] = "Hello World";
+    char str_[] = " Hello World";
     reverseString(str_);
 
     printf("%s\n",str_);

@@ -83,8 +83,24 @@ void binarySearch(int *arr, int low, int high, int target) {
     } 
 }
 
-void countSort(int *arr, int *count) {
-    
+void countSort(int *arr, int n) {
+    // only for digits between 0-255
+    int countarr[256] = {0}; int w = 0; // w is the index to sort the array correctly
+
+    //Loops the array parameter, counts the number of times a number has appeared in the array given
+    for (int i = 0; i < n; i ++) {
+        countarr[arr[i]] ++;
+    }
+
+    //Loops the count array
+    for (int j = 0; j < 256; j ++) {
+
+            //Loops a number that appears in the array given until == count of the number, increment w
+            for (int k = 1; k <= countarr[j]; k ++) {
+                arr[w] = j;
+                w++;
+            }
+    }
 }
 
 int partition(int left, int right,int *arr);
@@ -121,8 +137,15 @@ int main() {
     printf("\n");
     printf("%d\n",quickselect(0, 0, size_arr - 1, arrr));
 
-    int count[256] = {0};
-    int count_arr[5] = {3,1,2,1,3};
+    int count_arr[5] = {3,1,2,1,3}; 
+    int size = sizeof(count_arr) / sizeof(count_arr[0]);
+
+    countSort(count_arr, size);
+
+    for (int i = 0; i < size; i ++) {
+        printf("%d ", count_arr[i]);
+    }
+    printf("\n");
 
 
     return 0;
